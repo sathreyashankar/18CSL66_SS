@@ -12,9 +12,11 @@ char s[20],stack[20];
 void display(int i,int j)
 {
 	int k;
+	// Stack from bottom to top (0 to top)
 	for(k=0;k<=i;k++)
 		printf("%c",stack[k]);
 	printf(" ");
+	// Input String from j to n
 	for(k=j;k<=n;k++)
 		printf("%c",s[k]);
 	printf("\n");
@@ -72,9 +74,10 @@ void main()
 	{
 		if(stack[i]==s[j])
 		{
-			i--;
-			j++;
+			i--;	// pop element from top of the stack
+			j++;	// go to next character in the input string
 			
+			// check if ($==$)
 			if(stack[i]=='$' && s[j]=='$')
 			{
 				printf("$$\nSuccess\n");
@@ -84,19 +87,20 @@ void main()
 			else
 				if(stack[i]=='$' && s[j]!='$')
 				{
-					printf("Error\n");
+					printf("Error\n");	// Stack empty & input string not empty
 					break;
 				}
 				display(i,j);
 		}
 		
-		
+		// stack[i] chooses row
 		switch(stack[i])
 		{
 			case 'A':row=0;break;
 			case 'B':row=1;break;
 		}
 		
+		// s[j] chooses coloumn
 		switch(s[j])
 		{
 			case 'a':col=0;break;
@@ -104,12 +108,13 @@ void main()
 			case '$':col=2;break;
 		}
 		
-		
+		// table[][][]==empty ==> error
 		if(table[row][col][0]=='\0')
 		{
 			printf("\nError\n");
 			break;
 		}
+		// table[][][]==epsilon production ==> just pop the element from the string
 		else if(table[row][col][0]=='@')
 		{
 			i--;
@@ -117,13 +122,13 @@ void main()
 		}
 		else
 		{
+			// production rule implementation
 			for(k=size[row][col]-1;k>=0;k--)
 			{
 				stack[i]=table[row][col][k];
 				i++;
 			}			
 			i--;
-			
 			display(i,j);
 		}
 	}
